@@ -1,0 +1,13 @@
+#compdef system_profiler
+
+local _matches="$(system_profiler -listDataTypes | tail -n+2 | tr '\n' ' ' )"
+
+_arguments \
+	"-xml:Generates a report in XML format" \
+	"-json:Generates a report in JSON format" \
+	"-usage:Prints usage info and examples" \
+	"-listDataTypes:Lists the available datatypes" \
+	"-detailLevel:Specifies the level of detail for the report:( mini basic full )" \
+	"-timeout:Specifies the maximum time to spend gathering information the default is 180 seconds, 0 means no timeout" \
+	"::Data Types:( $_matches )"
+
