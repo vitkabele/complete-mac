@@ -1,0 +1,7 @@
+#compdef scselect
+
+local _matches="$( scselect | tail -n+2 | cut -f2 | tr -d '()' )"
+
+_arguments '-n[Delay changing the system location]' \
+		"::location_name:( $_matches )"
+
