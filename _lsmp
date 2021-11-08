@@ -1,0 +1,9 @@
+#compdef lsmp
+
+_arguments \
+	-p"[Process id]:pid:_pids" \
+	-a"[Print all mach ports for all processeses]" \
+	-v"[Print verbose details for kernel objects]" \
+	-j"[Save output as JSON to this location]:path:_files" \
+	-h"[Print this help]"
+
