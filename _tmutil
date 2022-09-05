@@ -6,33 +6,29 @@ local subcommands=(
 	"disable:Turn off automatic backups"
 	"startbackup:Begin a backup if one is not already running"
 	"stopbackup:Cancel a backup currently in progress"
-	"delete"
-	"deleteinprogress"
-	"restore"
-	"compare"
-	"compare"
-	"compare"
-	"setdestination"
-	"setdestination"
-	"removedestination"
-	"destinationinfo"
-	"addexclusion"
-	"removeexclusion"
-	"isexcluded"
-	"inheritbackup"
-	"inheritbackup"
-	"associatedisk"
-	"latestbackup"
-	"listbackups"
-	"machinedirectory"
-	"calculatedrift"
-	"uniquesize"
-	"verifychecksums"
-	"localsnapshot"
-	"listlocalsnapshots"
-	"listlocalsnapshotdates"
-	"deletelocalsnapshots"
-	"thinlocalsnapshots"
+	"delete:Deletes the backups with the specified timestamp from the backup volume mounted at the specified mountpoint"
+	"deleteinprogress:Delete all in-progress backups for a machine directory"
+	"restore:Restore the item src, which is inside a backup, to the location dst"
+	"compare:Perform a backup diff"
+	"setdestination:Configure a local HFS+ or APFS volume, AFP share, or SMB share as a backup destination"
+	"removedestination:Remove the destination with the specified unique identifier from the Time Machine configuration"
+	"destinationinfo:Print information about destinations currently configured for use with Time Machine"
+	"addexclusion:Configure an exclusion that tells Time Machine not to back up a file, directory, or volume during future backups"
+	"removeexclusion:Configure Time Machine to back up a file, directory, or volume during future backups"
+	"isexcluded:Determine if a file, directory, or volume are excluded from Time Machine backups"
+	"inheritbackup:Claim a machine directory or sparsebundle for use by the current machine"
+	"associatedisk:Bind a volume store directory to the specified local disk, thereby reconfiguring the backup history"
+	"latestbackup:List this computer's latest completed backup"
+	"listbackups:List all of this computer's completed backups"
+	"machinedirectory:Print the path to the current machine directory for this computer"
+	"calculatedrift:Analyze the backups in an HFS machine directory and determine the amount of change between each"
+	"uniquesize:Analyze the specified path in an HFS+ backup or path to an APFS backup and determine its unique size."
+	"verifychecksums:Compute a checksum of data contained within a backup"
+	"localsnapshot:Create new local Time Machine snapshots of all APFS volumes included in the Time Machine backup"
+	"listlocalsnapshots:List local Time Machine snapshots of the specified volume"
+	"listlocalsnapshotdates:List the creation dates of all local Time Machine snapshots"
+	"deletelocalsnapshots:If a date is specified, delete all local Time Machine snapshots on all mounted disks for the specified date"
+	"thinlocalsnapshots:Thin local Time Machine snapshots for the specified volume"
 )
 
 _arguments \
@@ -51,6 +47,19 @@ case $state in
 		destinationinfo)
 			_arguments "-X[Print output in XML property list format]"
 		;;
+		isexcluded)
+			_arguments \
+				"-X[Print output in XML property list format]" \
+				"*:item:_files"
+		;;
+		restore)
+			_arguments "*::path:_files -/"
+		;;
+		setdestination)
+			_arguments \
+				"-a[Append arg]" \
+				"-p[Prompt for password interactively]" 
+		;;
 		startbackup)
 			_arguments \
 			 	 '(-a --auto)'{-a,--auto}"[Run the backup in a mode similar to system-scheduled backup]" \
@@ -58,10 +67,11 @@ case $state in
 				 '(-d --destination)'{-d,--destintation}"[Perform the backup to the destination corresponding to the specified ID]:dest_id" \
 				 '(-b --block)'{-b,--block}"[Wait (block) until the backup is finished before exiting]"
 		;;
-		setdestination)
-			_arguments \
-				"-a[Append arg]" \
-				"-p[Prompt for password interactively]" 
+		listlocalsnapshots|uniquesize|verifychecksums)
+			_arguments "*:path:_files -/"
+		;;
+		listlocalsnapshotdates)
+			_arguments "*::path:_files -/"
 		;;
 		esac
 	;;
